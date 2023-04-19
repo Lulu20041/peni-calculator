@@ -1,0 +1,19 @@
+.form-login {
+    margin: 10% 0 0 40%;
+}
+.form-floating input {
+    padding: 1rem;
+    margin-top: 2.5rem;
+}
+header {
+    background-color: #212529;
+}
+button[type=submit] {
+    margin-top: 20px;
+    background-color: #00DBDB;
+    border: none;
+    letter-spacing: 0.08em;
+}
+input {
+    border-radius: 50px;
+}
