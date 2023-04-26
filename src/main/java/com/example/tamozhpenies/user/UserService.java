@@ -1,9 +1,9 @@
 package com.example.tamozhpenies.user;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +27,13 @@ public class UserService {
                 return "Client";
         }
         return null;
+    }
+    public Optional<User> getUserById(Long id) {
+        Optional<User> user = userRepo.findById(id);
+
+        return user;
+    }
+    public List<User> getClients() {
+        return userRepo.findAllClients();
     }
 }

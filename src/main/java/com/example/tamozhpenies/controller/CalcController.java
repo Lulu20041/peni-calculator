@@ -9,10 +9,7 @@ import com.example.tamozhpenies.peni.PeniService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,6 +27,24 @@ public class CalcController {
     }
     @GetMapping
     public String getPage(Model model) {
+        List<Currency> currencies = currencyService.getCurrencies();
+        model.addAttribute(currencies);
+
+        List<ClientSum> clientSum = clientSumService.getSums();
+        model.addAttribute("clientSums", clientSum);
+
+        double peniSum = peniService.peniSum();
+        model.addAttribute("peniSum", peniSum);
+
+        model.addAttribute("clientSum", new ClientSum());
+        model.addAttribute("currencyValue", new Currency());
+
+        List<Peni> penies = peniService.getPenies();
+        model.addAttribute("penies", penies);
+        return "calk";
+    }
+    @GetMapping("/{id}")
+    public String getUserPage(@PathVariable Long id, Model model) {
         List<Currency> currencies = currencyService.getCurrencies();
         model.addAttribute(currencies);
 

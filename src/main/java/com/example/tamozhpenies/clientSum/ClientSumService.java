@@ -15,6 +15,6 @@ public class ClientSumService {
         return clientSumRepo.findAll();
     }
     public List<ClientSum> getSumsOfClient(Long id) {
-        return clientSumRepo.findByUserId(id);
+        return clientSumRepo.findAllByUserId(id);
     }
 }

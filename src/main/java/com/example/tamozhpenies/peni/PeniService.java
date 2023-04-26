@@ -60,6 +60,7 @@ public class PeniService {
     public List<Peni> getPenies() {
         return peniRepo.findAll();
     }
+    public List<Peni> getPeniByUserId(Long id) { return peniRepo.findAllByUserId(id); }
     public void deletePenies() {
         peniRepo.deleteAll();
     }

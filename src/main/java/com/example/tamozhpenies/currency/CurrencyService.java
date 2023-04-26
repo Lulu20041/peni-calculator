@@ -11,7 +11,6 @@ import java.util.List;
 public class CurrencyService {
     private static final String API_URL = "https://www.nbrb.by/api/exrates/rates?periodicity=0";
     private final RestTemplate restTemplate;
-
     public CurrencyService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
