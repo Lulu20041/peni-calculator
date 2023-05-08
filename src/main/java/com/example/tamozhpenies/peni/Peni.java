@@ -86,4 +86,10 @@ public class Peni {
     public void setRefinancingRate(RefinancingRate refinancingRate) {
         this.refinancingRate = refinancingRate;
     }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

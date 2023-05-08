@@ -14,8 +14,8 @@ button[type=submit] {
     border: none;
     letter-spacing: 0.08em;
 }
-input {
-    border-radius: 50px;
+.rounded-circle {
+    border-radius: 100px;
 }
 greeting {
     padding-bottom: 100px;

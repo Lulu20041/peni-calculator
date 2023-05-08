@@ -33,7 +33,21 @@ public class UserService {
 
         return user;
     }
+    public User getUserByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
     public List<User> getClients() {
         return userRepo.findAllClients();
+    }
+    public void saveUser(User user) {
+        userRepo.save(user);
+    }
+    public boolean isUserArleadyExists(String username) {
+        User user = userRepo.findByUsername(username);
+        System.out.println(user.getUsername());
+        if (user != null) {
+            return true;
+        }
+        return false;
     }
 }

@@ -20,7 +20,7 @@
 <div class="container">
     <div class="row align-items-center">
         <div class="col">
-            <form action="#" th:action="@{calc/calculate}" th:method="post">
+            <form action="#" th:action="@{/calculate}" th:method="post">
                 <div class="row">
                     <label for="taxDate">Дата возникновения налогового обязательства</label>
                     <input type="date" id="taxDate" name="taxDate">
@@ -50,11 +50,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="sum : ${clientSums}" >
-                    <td th:text="${sum.date}"></td>
-                    <td th:text="${sum.sum}"></td>
+                    <td th:text="${sum?.date}"></td>
+                    <td th:text="${sum?.sum}"></td>
                     <td th:text="${sum.currency.getName()}"></td>
                     <td>
-                        <a th:href="@{'/delete/' + ${sum.id}}" class="btn btn-outline-danger"></a>
+                        <a th:href="@{'/delete/' + ${sum?.id}}" class="btn btn-outline-danger"></a>
                     </td>
                 </tr>
                 </tbody>
@@ -64,7 +64,7 @@
             <form action="#" th:action="@{/}" th:method="post" th:object="${clientSum}">
                 <div class="row">
                     <label for="payDate">Дата уплаты</label>
-                    <input class="form-control" type="date" th:value="${#dates.format(clientSum.date, 'yyyy-MM-dd')}"  id="payDate" th:field="*{date}">
+                    <input class="form-control" type="date" th:value="${#dates.format(clientSum?.date, 'yyyy-MM-dd')}"  id="payDate" th:field="*{date}">
                 </div>
                 <div class="row">
                     <label for="sum">Сумма</label>
@@ -99,12 +99,12 @@
             </thead>
             <tbody>
             <tr th:each="peni : ${penies}">
-                <td th:text="${peni.periodBegin}"></td>
-                <td th:text="${peni.periodEnd}"></td>
-                <td th:text="${peni.amountOfDays}"></td>
-                <td th:text="${peni.refinancingRate.getRate()*100} + '%'"></td>
-                <td th:text="${peni.taxSum}"></td>
-                <td th:text="${peni.peniAmount}"></td>
+                <td th:text="${peni?.periodBegin}"></td>
+                <td th:text="${peni?.periodEnd}"></td>
+                <td th:text="${peni?.amountOfDays}"></td>
+                <td th:text="${peni?.refinancingRate.getRate()*100} + '%'"></td>
+                <td th:text="${peni?.taxSum}"></td>
+                <td th:text="${peni?.peniAmount}"></td>
             </tr>
             <tr>
                 <td colspan="5"></td>

@@ -29,16 +29,6 @@ class UserServiceTests {
     }
     @Autowired
     OldPeniService peniService;
-    @Test
-    private void testCalculate() {
-        //given
-        Date taxDate = new Date("2023/02/17");
-        double taxSum = 50;
-        Date peniDate = new Date("2023/04/14");
-        //when
-        peniService.calculatePenies(taxDate,taxSum,peniDate);
-        System.out.println(peniService.getPenies());
-        WritableAssertionInfo info = assertThat(peniService.getPenies()).info;
-    }
+
 
 }

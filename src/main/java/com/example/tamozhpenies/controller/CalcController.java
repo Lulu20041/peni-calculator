@@ -6,6 +6,9 @@ import com.example.tamozhpenies.currency.Currency;
 import com.example.tamozhpenies.currency.CurrencyService;
 import com.example.tamozhpenies.peni.Peni;
 import com.example.tamozhpenies.peni.PeniService;
+import com.example.tamozhpenies.user.User;
+import com.example.tamozhpenies.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,46 +23,40 @@ public class CalcController {
     private final CurrencyService currencyService;
     private final ClientSumService clientSumService;
     private final PeniService peniService;
-    public CalcController(CurrencyService currencyService, ClientSumService clientSumService, PeniService peniService) {
+    private final UserService userService;
+    public CalcController(CurrencyService currencyService, ClientSumService clientSumService, PeniService peniService, UserService userService) {
         this.currencyService = currencyService;
         this.clientSumService = clientSumService;
         this.peniService = peniService;
+        this.userService = userService;
     }
-    @GetMapping
+    @GetMapping("/")
     public String getPage(Model model) {
         List<Currency> currencies = currencyService.getCurrencies();
-        model.addAttribute(currencies);
+        model.addAttribute("currencies",currencies);
+        model.addAttribute("clientName", "");
 
-        List<ClientSum> clientSum = clientSumService.getSums();
-        model.addAttribute("clientSums", clientSum);
-
-        double peniSum = peniService.peniSum();
-        model.addAttribute("peniSum", peniSum);
-
-        model.addAttribute("clientSum", new ClientSum());
-        model.addAttribute("currencyValue", new Currency());
-
-        List<Peni> penies = peniService.getPenies();
-        model.addAttribute("penies", penies);
-        return "calk";
+        return "calculate";
     }
-    @GetMapping("/{id}")
-    public String getUserPage(@PathVariable Long id, Model model) {
-        List<Currency> currencies = currencyService.getCurrencies();
-        model.addAttribute(currencies);
+    @GetMapping("/{clientName}")
+    public String getUserPage(@PathVariable String clientName, Model model) {
+        User user = userService.getUserByUsername(clientName);
+        model.addAttribute("clientName", clientName);
 
-        List<ClientSum> clientSum = clientSumService.getSums();
+        List<Currency> currencies = currencyService.getCurrencies();
+        model.addAttribute("currencies",currencies);
+
+        List<ClientSum> clientSum = clientSumService.getSumsOfClientByName(clientName);
         model.addAttribute("clientSums", clientSum);
 
-        double peniSum = peniService.peniSum();
+        double peniSum = peniService.peniSum(clientName);
         model.addAttribute("peniSum", peniSum);
 
-        model.addAttribute("clientSum", new ClientSum());
         model.addAttribute("currencyValue", new Currency());
 
-        List<Peni> penies = peniService.getPenies();
+        List<Peni> penies = peniService.getPenies(clientName);
         model.addAttribute("penies", penies);
-        return "calk";
+        return "calculate";
     }
     @PostMapping("/calculate")
     public String calculatePeni(@RequestParam("taxDate")
@@ -68,9 +65,30 @@ public class CalcController {
                                 @RequestParam("taxSum") double taxSum,
                                 @RequestParam("peniDate")
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                    LocalDate peniDate) {
+                                    LocalDate peniDate,
+                                @RequestParam(value = "clientName",defaultValue = "Ecos") String clientName) {
+        System.out.println(clientName);
         peniService.deletePenies();
-        peniService.calculatePenies(taxDate, taxSum, peniDate);
-        return "redirect:/admin/calc";
+        peniService.calculatePenies(taxDate, taxSum, peniDate, clientName);
+        return "redirect:/admin/calc/";
+    }
+    @PostMapping("/calculate/{clientName}")
+    public String calculateUserPeni(@PathVariable("clientName") String clientName,
+                                @RequestParam("taxDate")
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                LocalDate taxDate,
+                                @RequestParam("taxSum") double taxSum,
+                                @RequestParam("peniDate")
+                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                LocalDate peniDate) {
+        System.out.println(clientName);
+        peniService.deletePenies();
+        peniService.calculatePenies(taxDate, taxSum, peniDate, clientName);
+        return "redirect:/admin/calc/" + clientName;
+    }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
     }
 }

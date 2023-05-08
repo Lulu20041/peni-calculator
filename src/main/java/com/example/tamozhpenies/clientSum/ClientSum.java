@@ -26,6 +26,15 @@ public class ClientSum {
     @JoinColumn(referencedColumnName = "id")
     private User user;
     public ClientSum() { }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public LocalDate getDate() {
         return date;
     }

@@ -9,12 +9,17 @@ import java.util.List;
 
 @Service
 public class ClientSumService {
-    @Autowired
-    ClientSumRepo clientSumRepo;
+    final ClientSumRepo clientSumRepo;
+    public ClientSumService(ClientSumRepo clientSumRepo) {
+        this.clientSumRepo = clientSumRepo;
+    }
     public List<ClientSum> getSums() {
         return clientSumRepo.findAll();
     }
     public List<ClientSum> getSumsOfClient(Long id) {
         return clientSumRepo.findAllByUserId(id);
+    }
+    public List<ClientSum> getSumsOfClientByName(String username) {
+        return clientSumRepo.findAllByUsername(username);
     }
 }

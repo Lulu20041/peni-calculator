@@ -19,14 +19,14 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-4">
-                <form action="#" th:action="@{/login}" th:object="${user}" method="post">
+                <form action="#" th:action="@{/enter}"  method="post">
                     <div class="shadow row">
-                        <div class="form-floating mb-3">
-                            <input type="text" th:field="*{username}" id="username" class="form-control h-50" placeholder="Логин">
+                        <div class="form-floating rounded-circle mb-3">
+                            <input type="text" name="username" id="username" class="form-control h-50" placeholder="Логин">
                             <label for="username">Логин</label>
                         </div>
-                        <div class="form-floating mb-3">
-                            <input type="password" th:field="*{password}" id="password" class="form-control h-50" placeholder="Пароль">
+                        <div class="form-floating rounded-circle mb-3">
+                            <input type="password" name="password" id="password" class="form-control h-50" placeholder="Пароль">
                             <label for="password">Пароль</label>
                         </div>
                     </div>

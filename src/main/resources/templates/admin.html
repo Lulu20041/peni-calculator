@@ -26,16 +26,19 @@
     <div class="container mt-4">
       <div class="row justify-content-center">
         <div class="col-md-4">
-          <form th:action="@{admin/redirect}" method="post">
+          <form th:action="@{admin/calc/{name}(name=${client.username})}"  method="get">
             <label for="clientName" class="form-label">Выберите клиента:</label>
-            <input class="form-control" list="clientDatalist" th:name="clientName" id="clientName" placeholder="Имя клиента">
+            <input type="text" class="form-control" list="clientDatalist" name="clientName" id="clientName" placeholder="Имя клиента" required>
             <datalist id="clientDatalist">
-              <th:block th:each="client : ${clients}">
-                <option th:value="${client.username}"></option>
-              </th:block>
+              <option th:each="client : ${clients}" th:value="${client.username}" th:text="${client.username}"></option>
             </datalist>
             <button type="submit" class="w-100 btn btn-primary btn-block">Рассчитать пеню</button>
           </form>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-4">
+          <a href="/admin/register">Зарегестрировать нового пользователя</a>
         </div>
       </div>
     </div>
