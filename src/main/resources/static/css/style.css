@@ -14,9 +14,38 @@ button[type=submit] {
     border: none;
     letter-spacing: 0.08em;
 }
+#collapseButton {
+    margin-top: 20px;
+    background-color: #00DBDB;
+    border: none;
+    letter-spacing: 0.08em;
+}
 .rounded-circle {
     border-radius: 100px;
 }
 greeting {
     padding-bottom: 100px;
 }
+
+table td {
+    white-space: nowrap;
+}
+
+.table-sortable th {
+    cursor: pointer;
+}
+
+.table-sortable .th-sort-asc::after {
+    content: "\25b4";
+}
+
+.table-sortable .th-sort-desc::after {
+    content: "\25be";
+}
+
+.table-sortable .th-sort-asc::after,
+.table-sortable .th-sort-desc::after {
+    margin-left: 5px;
+}
+
+

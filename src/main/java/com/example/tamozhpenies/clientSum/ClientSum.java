@@ -12,19 +12,27 @@ import java.time.LocalDate;
 @Entity
 public class ClientSum {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //Дата уплаты
     @PastOrPresent
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate date;
+
+    //Размер уплаты
     @Min(0)
     private double sum;
+
     @OneToOne
     @JoinColumn(name = "currencyId", referencedColumnName = "id")
     private Currency currency;
+
+    //Клиент
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
     private User user;
+
     public ClientSum() { }
 
     public Long getId() {
@@ -54,4 +62,11 @@ public class ClientSum {
     public Currency getCurrency() { return currency; }
 
     public void setCurrency(Currency currency) { this.currency = currency; }
+
+    public User getUser() { return user; }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
 }

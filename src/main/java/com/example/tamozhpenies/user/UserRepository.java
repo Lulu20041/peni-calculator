@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
-    @Query("SELECT u FROM User u WHERE u.isAdmin=false")
+
+    @Query("SELECT u FROM User u WHERE u.role='CLIENT' ")
     List<User> findAllClients();
 }

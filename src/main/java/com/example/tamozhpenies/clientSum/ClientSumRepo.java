@@ -9,6 +9,7 @@ import java.util.List;
 public interface ClientSumRepo extends JpaRepository<ClientSum, Long> {
     @Query("SELECT c FROM ClientSum c WHERE c.user = :userId")
     List<ClientSum> findAllByUserId(@Param("userId") Long userId);
+
     @Query("SELECT c FROM ClientSum c WHERE c.user.username = :username")
     List<ClientSum> findAllByUsername(@Param("username") String username);
 }

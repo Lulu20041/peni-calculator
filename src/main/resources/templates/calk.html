@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Калькулятор пеней</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="icon" href="/images/logo_ru.png">
+
 </head>
 <style>
     .my-custom-scrollbar {
@@ -17,30 +21,72 @@
     }
 </style>
 <body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/images/logo_ru.png" alt="Белтаможсервис">
+            </a>
+            <a href="/logout">
+                <img src="https://img.icons8.com/sf-black/64/FFFFFF/exit.png"/>
+            </a>
+        </div>
+    </nav>
+</header>
 <div class="container">
+    <div class="row pt-3">
+        <p>
+            <a href="/admin" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">
+                На главную
+            </a>
+        </p>
+        <h1 th:text="${clientName}"></h1>
+    </div>
     <div class="row align-items-center">
         <div class="col">
-            <form action="#" th:action="@{/calculate}" th:method="post">
+            <p>
+                <a class="btn btn-primary">
+
+                </a>
+            </p>
+            <div class="collapse" id="taxForm">
+                <div class="card card-body">
+                    <form>
+                        <div>
+                            <label for="taxDate">Дата возникновения налогового обязательства</label>
+                            <input class="form-control" th:type="date" id="taxDate" name="taxDate" required>
+                        </div>
+                        <div>
+                            <label for="taxSum">Сумма налогового обязательства (BYN)</label>
+                            <input class="form-control" th:field="*{taxSum}" type="text" id="taxSum" name="taxSum" required>
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('taxSum')}" th:errorclass="error"  th:errors="*{taxSum}">Некорректно указана сумма</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <form action="#" th:action="@{/admin/calc/calculate/{clientName}(clientName=${clientName})}" th:object="${peniDAO}" th:method="post">
                 <div class="row">
                     <label for="taxDate">Дата возникновения налогового обязательства</label>
-                    <input type="date" id="taxDate" name="taxDate">
+                    <input class="form-control" th:type="date" id="taxDate" name="taxDate" required>
                 </div>
                 <div class="row">
-                    <label for="taxSum">Сумма налогового обязательства</label>
-                    <input type="text" id="taxSum" name="taxSum">
+                    <label for="taxSum">Сумма налогового обязательства (BYN)</label>
+                    <input class="form-control" th:field="*{taxSum}" type="text" id="taxSum" name="taxSum" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('taxSum')}" th:errorclass="error"  th:errors="*{taxSum}">Некорректно указана сумма</div>
                 </div>
                 <div class="row">
                     <label for="peniDate">Дата расчёта пени ( дд.мм.гггг )</label>
-                    <input type="date" id="peniDate" name="peniDate">
+                    <input class="form-control" th:field="*{peniDate}" type="date" id="peniDate" name="peniDate" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('peniDate')}" th:errorclass="error" th:errors="*{peniDate}"></div>
                 </div>
                 <div class="row">
-                    <button type="submit">Рассчитать пени</button>
+                    <button type="submit" class="btn bg-color-info">Рассчитать пеню</button>
                 </div>
             </form>
         </div>
-        <div class="col table-wrapper-scroll-y my-custom-scrollbar">
+        <div class="col  table-wrapper-scroll-y my-custom-scrollbar">
             <label for="sums">Суммы, уплаченные плательщиком в счет исполнения налогового обязательства:</label>
-            <table id="sums" class="table table-bordered overflow-auto">
+            <table id="sums" class="table bg-info-subtle table-bordered overflow-auto">
                 <thead class="thead-light">
                 <tr>
                     <th>Дата уплаты</th>
@@ -50,43 +96,51 @@
                 </thead>
                 <tbody>
                 <tr th:each="sum : ${clientSums}" >
-                    <td th:text="${sum?.date}"></td>
+                    <td th:text="${sum?.date} ? ${#temporals.format(sum?.date,'dd.MM.yyyy')}"></td>
                     <td th:text="${sum?.sum}"></td>
                     <td th:text="${sum.currency.getName()}"></td>
                     <td>
-                        <a th:href="@{'/delete/' + ${sum?.id}}" class="btn btn-outline-danger"></a>
+                        <a th:href="@{/admin/calc/deleteSum/{clientName}/{id}(clientName=${clientName},id=${sum.id})}" class="btn btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF0000" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                            </svg>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <div class="col">
-            <form action="#" th:action="@{/}" th:method="post" th:object="${clientSum}">
+            <form action="#" th:action="@{/admin/calc/payment/{clientName}(clientName=${clientName})}" th:object="${clientSumDao}" th:method="post">
                 <div class="row">
                     <label for="payDate">Дата уплаты</label>
-                    <input class="form-control" type="date" th:value="${#dates.format(clientSum?.date, 'yyyy-MM-dd')}"  id="payDate" th:field="*{date}">
+                    <div th:if="${#fields.hasErrors('date')}"  th:errors="*{date}" class="alert alert-warning" role="alert" >
+                        <p>Некорректно указана дата</p>
+                    </div>
+                    <input class="form-control" type="date" th:value="${#temporals.format(clientSum?.date, 'dd-MM-yyyy')}" required id="payDate" name="date">
                 </div>
                 <div class="row">
                     <label for="sum">Сумма</label>
-                    <input class="form-control" id="sum" th:field="*{sum}">
+                    <input class="form-control" id="sum" th:field="*{sum}" name="sum" required>
+                    <div class="alert alert-warning" th:if="${#fields.hasErrors('sum')}" th:errorclass="error"  th:errors="*{sum}">Некорректно указана сумма</div>
                 </div>
                 <div class="row">
                     <label>Валюта</label>
-                    <select class="form-select" th:field="*{currency}">
+                    <select required class="form-select" name="currencyId">
                         <option th:each="currency : ${currencies}"
                                 th:text="${currency.name}"
                                 th:value="${currency.id}"></option>
                     </select>
                 </div>
                 <div class="col">
-                    <button class="btn btn-outline-success" type="submit">Добавить</button>
-                    <button class="btn btn-outline-danger">Удалить</button>
+                    <button class="btn" type="submit">Добавить</button>
                 </div>
             </form>
         </div>
     </div>
-    <div class="row">
-        <table class="table table-bordered overflow-auto">
+    <div class="row mt-3">
+        <table  class="table bg-info-subtle table-hovered table-bordered overflow-auto">
             <thead class="thead-light">
             <tr>
                 <th>Начало периода</th>
@@ -99,8 +153,8 @@
             </thead>
             <tbody>
             <tr th:each="peni : ${penies}">
-                <td th:text="${peni?.periodBegin}"></td>
-                <td th:text="${peni?.periodEnd}"></td>
+                <td th:text="${peni?.periodBegin} ? ${#temporals.format(peni?.periodBegin, 'dd.MM.yyyy')}"></td>
+                <td th:text="${peni?.periodEnd} ? ${#temporals.format(peni?.periodEnd, 'dd.MM.yyyy')}"></td>
                 <td th:text="${peni?.amountOfDays}"></td>
                 <td th:text="${peni?.refinancingRate.getRate()*100} + '%'"></td>
                 <td th:text="${peni?.taxSum}"></td>
@@ -114,8 +168,8 @@
         </table>
     </div>
     <div class="row">
-        <form action="#" th:method="post" th:action="@{/clear}">
-            <button type="submit" class="btn btn-outline-danger">Очистить</button>
+        <form action="#" th:method="post" th:action="@{/admin/calc/clear/{clientName}(clientName=${clientName})}">
+            <button type="submit" class="btn">Очистить</button>
         </form>
 
 

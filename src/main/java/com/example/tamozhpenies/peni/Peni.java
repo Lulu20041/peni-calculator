@@ -16,28 +16,36 @@ public class Peni {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @PastOrPresent
     @NotNull
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate periodBegin;
+
     @PastOrPresent
     @NotNull
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate periodEnd;
+
     @Min(0)
     private int amountOfDays;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "refinancingRate_id", referencedColumnName = "id")
     private RefinancingRate refinancingRate;
+
     @Min(0)
     private double taxSum;
+
     @Min(0)
     private double peniAmount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(referencedColumnName = "id")
     private User user;
+
     public Peni() { }
 
     public LocalDate getPeriodBegin() {
@@ -83,12 +91,15 @@ public class Peni {
     public RefinancingRate getRefinancingRate() {
         return refinancingRate;
     }
+
     public void setRefinancingRate(RefinancingRate refinancingRate) {
         this.refinancingRate = refinancingRate;
     }
+
     public User getUser() {
         return user;
     }
+
     public void setUser(User user) {
         this.user = user;
     }

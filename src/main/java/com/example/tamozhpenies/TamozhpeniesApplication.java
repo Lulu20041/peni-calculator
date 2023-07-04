@@ -11,6 +11,4 @@ public class TamozhpeniesApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(TamozhpeniesApplication.class, args);
     }
-
-
 }
